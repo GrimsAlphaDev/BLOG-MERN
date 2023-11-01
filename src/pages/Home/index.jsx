@@ -7,7 +7,7 @@ export default function Home() {
         <MainApp>
             <div className="home-page-wrapper">
                 <div className="create-wrapper">
-                    <Button title="create blog" />
+                    <Button title="create blog" to="/create-blog" />
                 </div>
                 <Gap height={20} />
                 <div className="content-wrapper">

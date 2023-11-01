@@ -1,8 +1,10 @@
 import React from 'react';
 import { LoginBg } from '../../assets';
 import { Button, Input, Gap, Link } from '../../components';
+import { useNavigate } from 'react-router-dom';
 
 export default function Login(){
+    const navigation = useNavigate();
     return (
         <div className='main-page'>
         <div className='left'>
@@ -14,9 +16,9 @@ export default function Login(){
             <Gap height={18}/>
             <Input label="Password" placeholder="password" type="password"/>
             <Gap height={50}/>
-            <Button title='Login' />
+            <Button title='Login' to="/" />
             <Gap height={100}/>
-            <Link title="Belum punya akun ?, Silahkan Daftar" />
+            <Link title="Belum punya akun ?, Silahkan Daftar" onClick={() => navigation('/register')} />
         </div>
     </div>
     );
