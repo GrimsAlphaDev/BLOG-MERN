@@ -1,41 +1,47 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import MainApp from "../MainApp";
 import "./detailBlog.scss";
 import { Gap, Link } from "../../components";
-import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
-import { getDataBlog } from "../../config/Redux/action";
-import { useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 export default function Home() {
     const navigation = useNavigate();
 
+    const [data, setData] = useState({});
+
     const { id } = useParams();
 
-    const { dataBlog } = useSelector((state) => state.detailReducer);
-    const dispatch = useDispatch();
-
     useEffect(() => {
-        dispatch(getDataBlog(id));
-    }, [dispatch, id]);
 
-    return (
-        <MainApp>
-            <div className="detail-blog-wrapper">
-                <img
-                    className="img-cover"
-                    src={`http://localhost:4000/${dataBlog.image}`}
-                    alt="thumb"
-                />
-                <p className="blog-title">{dataBlog.title}</p>
-                <p className="blog-author">
-                    {dataBlog.author.name ? dataBlog.author.name : "loading"}-{" "}
-                    {dataBlog.date}
-                </p>
-                <p className="blog-body">{dataBlog.body}</p>
-                <Gap height={20} />
-                <Link title="Kembali Ke Home" onClick={() => navigation("/")} />
-            </div>
-        </MainApp>
-    );
+        axios
+            .get(`http://localhost:4000/v1/blog/post/${id}`)
+            .then((res) => {
+                console.log("data api detail blog: ", res.data.data);
+                setData(res.data.data);
+            })
+            .catch((err) => {
+                console.log("err: ", err);
+            });
+    }, [id]);
+
+    if(data.author){
+        return (
+            <MainApp>
+                <div className="detail-blog-wrapper">
+                    <img
+                        className="img-cover"
+                        src={`http://localhost:4000/${data.image}`}
+                        alt="thumb"
+                    />
+                    <p className="blog-title">{data.title}</p>
+                    <p className="blog-author">{data.author.name} - {data.createdAt}</p>
+                    <p className="blog-body">{data.body}</p>
+                    <Gap height={20} />
+                    <Link title="Kembali Ke Home" onClick={() => navigation("/")} />
+                </div>
+            </MainApp>
+        );
+    }
+    return <p>Loading ....</p>
 }
