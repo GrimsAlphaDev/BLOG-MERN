@@ -1,12 +1,12 @@
-import { LoginBg } from '../../../assets';
 import './upload.scss';
 
-export default function Upload()
+export default function Upload({img, ...rest})
 {
     return (
         <div className='upload'>
-            <img src={LoginBg} className='preview' alt="preview" />
-            <input type="file" />
+            
+            {img && <img src={img} className='preview' alt="preview" />}
+            <input type="file" {...rest} />
         </div>
     );
 }

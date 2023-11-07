@@ -1,8 +1,7 @@
-import { RegisterBg } from "../../../assets";
 import { Button, Gap } from "../../atoms";
 import './blogItem.scss'
 
-export default function BlogItem({image, title, name, date, body}) {
+export default function BlogItem({image, title, name, date, body, id}) {
     return (
         <div className="blog-item">
             <img className="image-thumb" src={image} alt="post" />
@@ -12,7 +11,7 @@ export default function BlogItem({image, title, name, date, body}) {
                 <p className="body">{body}</p>
             </div>
             <Gap height={20}/>
-            <Button title="View Detail" to="/detail-blog"/>
+            <Button title="View Detail" to={`/detail-blog/${id}`} />
         </div>
     );
 }

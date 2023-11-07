@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { BlogItem, Button, Gap } from "../../components";
 import MainApp from "../MainApp";
 import "./home.scss";
@@ -6,14 +6,29 @@ import { useDispatch, useSelector } from "react-redux";
 import { setDataBlog } from "../../config/Redux/action";
 
 export default function Home() {
-    const {dataBlog} = useSelector((state) => state.homeReducer);
+    const [counter, setCounter] = useState(1);
+    const { dataBlog, page } = useSelector((state) => state.homeReducer);
     const dispatch = useDispatch();
 
-    // console.log("state Global: ", dataBlogs);
+    const fetchData = async () => {
+        // Fetch data based on the current counter value
+        await dispatch(setDataBlog(counter));
+    };
+
     useEffect(() => {
-        dispatch(setDataBlog());
-    }, [dispatch]);
-    
+        fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [dispatch, counter]);
+
+    const previous = () => {
+        setCounter(counter <= 1 ? 1 : counter - 1);
+    };
+
+    const next = () => {
+        setCounter(counter === page.totalPage ? page.totalPage : counter + 1);
+    };
+
+
     return (
         <MainApp>
             <div className="home-page-wrapper">
@@ -32,14 +47,23 @@ export default function Home() {
                                 name={blog.author.name}
                                 date={blog.createdAt}
                                 body={blog.body}
+                                id={blog._id}
                             />
                         );
                     })}
                 </div>
                 <div className="pagination">
-                    <Button title="Previous" />
+                    {/* <Button onClick={previous} title="Previous" /> */}
+                    <button className="button" onClick={previous}>
+                        Previous
+                    </button>
                     <Gap width={20} />
-                    <Button title="Next" />
+                    <p className="text-page">{page.currentPage} / {page.totalPage}</p>
+                    <Gap width={20} />
+                    {/* <Button onClick={next} title="Next" /> */}
+                    <button className="button" onClick={next}>
+                        Next
+                    </button>
                 </div>
                 <Gap height={20} />
             </div>
