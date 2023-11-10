@@ -16,7 +16,8 @@ const Router = createBrowserRouter([
         element: <Register />
     },
     {
-        path: "/create-blog",
+        // add optional params for id in create-blog not required to pass id to params
+        path: "/create-blog/:id?",
         element: <CreateBlog />
     },
     {
